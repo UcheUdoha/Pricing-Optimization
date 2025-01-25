@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit Price Prediction</title>
+</head>
+<body>
+    <h1>Insurance Claim Prediction</h1>
+    <form id="inputForm">
+        <!-- Input Fields for All Columns -->
+        <label for="product_id">Product ID:</label>
+        <input type="text" id="product_id" value=""><br>
+
+        <label for="product_category_name">Product Category Name:</label>
+        <input type="text" id="product_category_name" value=""><br>
+
+        <label for="month_year">Month/Year:</label>
+        <input type="text" id="month_year" value=""><br>
+
+        <label for="qty">Quantity:</label>
+        <input type="number" id="qty" value=""><br>
+
+        <label for="total_price">Total Price:</label>
+        <input type="number" id="total_price" value="" step="0.01"><br>
+
+        <label for="freight_price">Freight Price:</label>
+        <input type="number" id="freight_price" value="" step="0.01"><br>
+
+        <!--<label for="unit_price">Unit Price:</label>
+        <input type="number" id="unit_price" value="" step="0.01"><br>
+        -->
+        <label for="product_name_lenght">Product Name Length:</label>
+        <input type="number" id="product_name_lenght" value=""><br>
+
+        <label for="product_description_lenght">Product Description Length:</label>
+        <input type="number" id="product_description_lenght" value=""><br>
+
+        <label for="product_photos_qty">Product Photos Quantity:</label>
+        <input type="number" id="product_photos_qty" value=""><br>
+        
+        <label for="product_weight_g">Product Weight (g):</label>
+        <input type="number" id="product_weight_g" value="" step="0.01"><br>
+
+        <label for="product_score">Product Score:</label>
+        <input type="number" id="product_score" value="" step="0.01"><br>
+
+        <label for="customers">Customers:</label>
+        <input type="number" id="customers" value=""><br>
+
+        <label for="weekday">Weekday (0 or 1):</label>
+        <input type="number" id="weekday" value="0" min="0" max="1"><br>
+
+        <label for="weekend">Weekend (0 or 1):</label>
+        <input type="number" id="weekend" value="0" min="0" max="1"><br>
+
+        <label for="holiday">Holiday (0 or 1):</label>
+        <input type="number" id="holiday" value="0" min="0" max="1"><br>
+
+        <label for="month">Month:</label>
+        <input type="number" id="month" value="" min="1" max="12"><br>
+
+        <label for="year">Year:</label>
+        <input type="number" id="year" value=""><br>
+
+        <label for="s">S:</label>
+        <input type="number" id="s" value=""><br>
+
+        <label for="volume">Volume:</label>
+        <input type="number" id="volume" value="" step="0.01"><br>
+
+        <label for="comp_1">Comp 1:</label>
+        <input type="number" id="comp_1" value=""><br>
+
+        <label for="ps1">PS1:</label>
+        <input type="number" id="ps1" value="" step="0.01"><br>
+
+        <label for="fp1">FP1:</label>
+        <input type="number" id="fp1" value="" step="0.01"><br>
+
+        <label for="comp_2">Comp 2:</label>
+        <input type="number" id="comp_2" value=""><br>
+
+        <label for="ps2">PS2:</label>
+        <input type="number" id="ps2" value="" step="0.01"><br>
+
+        <label for="fp2">FP2:</label>
+        <input type="number" id="fp2" value="" step="0.01"><br>
+
+        <label for="comp_3">Comp 3:</label>
+        <input type="number" id="comp_3" value=""><br>
+
+        <label for="ps3">PS3:</label>
+        <input type="number" id="ps3" value="" step="0.01"><br>
+
+        <label for="fp3">FP3:</label>
+        <input type="number" id="fp3" value="" step="0.01"><br>
+
+        <label for="lag_price">Lag Price:</label>
+        <input type="number" id="lag_price" value="" step="0.01"><br>
+
+        <button type="button" onclick="submitForm()">Predict</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script>
+        function submitForm() {
+            // Extract input values
+            const data = {
+                product_id: document.getElementById('product_id').value,
+                product_category_name: document.getElementById('product_category_name').value,
+                month_year: document.getElementById('month_year').value,
+                qty: Number(document.getElementById('qty').value),
+                total_price: parseFloat(document.getElementById('total_price').value),
+                freight_price: parseFloat(document.getElementById('freight_price').value),
+                //unit_price: parseFloat(document.getElementById('unit_price').value),
+                product_name_lenght: Number(document.getElementById('product_name_lenght').value),
+                product_description_lenght: Number(document.getElementById('product_description_lenght').value),
+                product_photos_qty: Number(document.getElementById('product_photos_qty').value),
+                product_weight_g: parseFloat(document.getElementById('product_weight_g').value),
+                product_score: parseFloat(document.getElementById('product_score').value),
+                customers: Number(document.getElementById('customers').value),
+                weekday: Number(document.getElementById('weekday').value),
+                weekend: Number(document.getElementById('weekend').value),
+                holiday: Number(document.getElementById('holiday').value),
+                month: Number(document.getElementById('month').value),
+                year: Number(document.getElementById('year').value),
+                s: Number(document.getElementById('s').value),
+                volume: parseFloat(document.getElementById('volume').value),
+                comp_1: parseFloat(document.getElementById('comp_1').value),
+                ps1: parseFloat(document.getElementById('ps1').value),
+                fp1: parseFloat(document.getElementById('fp1').value),
+                comp_2: parseFloat(document.getElementById('comp_2').value),
+                ps2: parseFloat(document.getElementById('ps2').value),
+                fp2: parseFloat(document.getElementById('fp2').value),
+                comp_3: parseFloat(document.getElementById('comp_3').value),
+                ps3: parseFloat(document.getElementById('ps3').value),
+                fp3: parseFloat(document.getElementById('fp3').value),
+                lag_price: parseFloat(document.getElementById('lag_price').value)
+            };
+            
+            // Send the data to the backend
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.prediction) {
+                    document.getElementById('result').innerText = 'Prediction: ' + result.prediction;
+                } else {
+                    document.getElementById('result').innerText = 'Error: ' + result.error;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
